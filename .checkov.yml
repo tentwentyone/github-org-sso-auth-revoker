@@ -1,0 +1,4 @@
+skip-check:
+  - CKV_DOCKER_8 # Ensure the last USER is not root - github runner uses root
+  - CKV_DOCKER_2 # Ensure that HEALTHCHECK instructions have been added to container images - not required for this action
+  - CKV2_GHA_1 # Ensure top-level permissions are not set to write-all - this action requires write permissions

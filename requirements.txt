@@ -1,0 +1,4 @@
+pyjwt==2.9.0
+requests==2.32.3
+cryptography==43.0.3
+rich==13.7.1

@@ -1,0 +1,49 @@
+name: 'Revoke Unused GitHub Credentials'
+description: 'An action to revoke unused GitHub Personal Access Tokens (PATs) and SAML SSO authorizations for an organization.'
+
+inputs:
+  dry-run:
+    description: 'Indicates whether the action should perform a dry run.'
+    required: true
+    default: true
+    type: boolean
+  days:
+    description: 'Number of days to check for inactive credentials.'
+    required: true
+    default: 45
+    type: number
+  whitelist:
+    description: 'List of credential IDs to ignore (comma separated). If empty, the GH_WHITELIST environment variable will be used.'
+    required: false
+    default: ''
+    type: string
+  gh_app_id:
+    description: 'GitHub App ID.'
+    required: true
+    type: string
+  gh_pem_key:
+    description: 'GitHub App PEM key.'
+    required: true
+    type: string
+  gh_install_id:
+    description: 'GitHub App installation ID.'
+    required: true
+    type: string
+  gh_org:
+    description: 'GitHub organization.'
+    required: true
+    type: string
+    default: ${{ github.repository_owner }}
+
+
+
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+  args: ['--no-color', '--days', '${{ inputs.days || 45}}', '--dry-run=${{ inputs.dry-run || false }}', '--whitelist=${{ inputs.whitelist}}']
+  env:
+    GH_APP_ID: ${{ inputs.gh_app_id }}
+    GH_PEM_KEY: ${{ inputs.gh_pem_key }}
+    GH_INSTALL_ID: ${{ inputs.gh_install_id }}
+    GH_ORG: ${{ inputs.gh_org }}
+    COLUMNS: 200 # to avoid line wrapping or truncation of output

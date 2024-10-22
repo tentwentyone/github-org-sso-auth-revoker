@@ -1,0 +1,21 @@
+# Configuration file for Mega-Linter
+# See all available variables at https://nvuillam.github.io/mega-linter/configuration/ and in linters documentation
+
+APPLY_FIXES:
+  - MARKDOWN_MARKDOWNLINT
+# ENABLE: # If you use ENABLE variable, all other languages/formats/tooling-formats will be disabled by default
+# ENABLE_LINTERS: # If you use ENABLE_LINTERS variable, all other linters will be disabled by default
+ENABLE_LINTERS:
+  - REPOSITORY_CHECKOV
+  - MARKDOWN_MARKDOWNLINT
+  - EDITORCONFIG_EDITORCONFIG_CHECKER
+  - CREDENTIALS_SECRETLINT
+  - GIT_GIT_DIFF
+SHOW_ELAPSED_TIME: false
+FILEIO_REPORTER: false
+IGNORE_GITIGNORED_FILES: true # If set to true, Mega-Linter will skip files ignored by git using .gitignore file
+MARKDOWN_MARKDOWNLINT_CONFIG_FILE: LINTER_DEFAULT
+REPOSITORY_CHECKOV_CONFIG_FILE: LINTER_DEFAULT
+TERRAFORM_TFLINT_UNSECURED_ENV_VARIABLES:
+- GITHUB_TOKEN
+VALIDATE_ALL_CODEBASE: true

@@ -1,0 +1,14 @@
+#! more info here: https://megalinter.github.io/latest/
+name: MegaLinter
+
+on:
+  pull_request:
+
+jobs:
+  megalinter:
+    uses: tentwentyone/github-workflows-ccoe/.github/workflows/megalinter-terraform-v2.yml@main
+    secrets: inherit
+    permissions:
+      contents: write
+      issues: write
+      pull-requests: write

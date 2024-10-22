@@ -1,0 +1,64 @@
+name: 🛡️ Security Issue Report
+description: Report a security issue with your findings
+labels:
+  - kind/security
+  - priority/critical
+  - status/needs-triage
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        **Thank you for reporting a security issue!** 🛡️
+        Before submitting, please ensure that:
+        - There are no existing open or closed issues related to this one
+        - You provide as much detail as possible to help us address the issue quickly
+        _Feel free to skip any optional fields if you're unsure._
+
+  - type: textarea
+    id: summary
+    attributes:
+      label: "🔍 Summary"
+      description: "A brief summary of the security issue (impact, severity, etc.)"
+    validations:
+      required: true
+
+  - type: textarea
+    id: tested-version
+    attributes:
+      label: "🔖 Tested Version"
+      description: "Version(s) of the action where the issue was found"
+    validations:
+      required: true
+
+  - type: textarea
+    id: details
+    attributes:
+      label: "📝 Vulnerability Details"
+      description: "A detailed explanation of the security issue (e.g., affected code, configurations)"
+    validations:
+      required: true
+
+  - type: textarea
+    id: poc
+    attributes:
+      label: "🧪 Proof of Concept (Optional)"
+      description: "Steps to reproduce the vulnerability, if available"
+    validations:
+      required: false
+
+  - type: textarea
+    id: impact
+    attributes:
+      label: "⚠️ Impact"
+      description: "Describe the potential impact if this issue is exploited (e.g., data breach, remote code execution)"
+    validations:
+      required: true
+
+  - type: textarea
+    id: remediation
+    attributes:
+      label: "💡 Suggested Remediation (Optional)"
+      description: "Any recommendations or ideas for fixing the issue"
+    validations:
+      required: false

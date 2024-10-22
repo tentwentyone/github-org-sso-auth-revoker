@@ -1,0 +1,41 @@
+name: Revoke Inactive Credentials
+permissions:
+  contents: read
+on:
+  workflow_dispatch:
+    inputs:
+      dry-run:
+        description: 'Dry run'
+        required: true
+        default: true
+        type: boolean
+
+      days:
+        description: 'Number of days to check for inactive creds'
+        required: true
+        default: 45
+        type: number
+
+      whitelist:
+        description: 'List of credential ids to ignore (comma separated) if empty GH_WHITELIST env var will be used'
+        required: false
+        default: ''
+        type: string
+
+  schedule:
+    - cron: '0 12 * * 1' # run every monday at 12:00 UTC
+
+jobs:
+  revoke_inactive_credentials:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Revoke Inactive Credentials
+        uses: tentwentyone/github-org-sso-auth-revoker@v1
+        with:
+          days: ${{github.event.inputs.days || 45}}
+          dry-run: ${{github.event.inputs.dry-run || true}}
+          whitelist: ${{github.event.inputs.whitelist || secrets.GH_CRED_REVOKER_WHITELIST }} #change this to your own secret
+          gh_app_id: ${{ secrets.GH_CRED_REVOKER_APP_ID }} #change this to your own secret
+          gh_pem_key: ${{ secrets.GH_CRED_REVOKER_PEM_KEY }} #change this to your own secret
+          gh_install_id: ${{ secrets.GH_CRED_REVOKER_INSTALL_ID }} #change this to your own secret
+

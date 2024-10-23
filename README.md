@@ -10,8 +10,6 @@ This action can only be used in organizations where Single Sign-On (SSO) is enab
 
 The action utilizes a GitHub App to authenticate against the GitHub API. It retrieves all associated credentials for the organization and checks the last time they were used. If a credential has not been utilized for the specified number of days, and it is not expired, the action revokes it.
 
-
-
 ## Why Should I Use This Action?
 
 An increased attack surface results from having unused (but active) credentials within your organization. Revoking these credentials reduces the risk of unauthorized access to your organization. Furthermore, you only need to set it up once, and it will run automatically on a schedule you define, saving you time and effort.

@@ -322,30 +322,68 @@ class GHWrapper:
         Example response:
         [
             {
-                "login": "octocat",
-                "credential_id": 161195,
-                "credential_type": "personal access token",
-                "token_last_eight": "71c3fc11",
-                "credential_authorized_at": "2011-01-26T19:06:43Z",
-                "credential_accessed_at": "2011-01-26T19:06:43Z",
-                "authorized_credential_expires_at": "2011-02-25T19:06:43Z",
-                "scopes": [
-                "user",
-                "repo"
-                ]
+                "login":"hubot",
+                "credential_id":30233948,
+                "credential_type":"personal access token",
+                "credential_authorized_at":"2022-04-05T11:55:08Z",
+                "credential_accessed_at":"2024-10-17T21:55:07Z",
+                "authorized_credential_id":692744952,
+                "token_last_eight":"yXXXXXXo",
+                "scopes":[
+                    "delete:packages",
+                    "repo",
+                    "workflow",
+                    "write:packages"
+                ],
+                "authorized_credential_note":"name of pat here",
+                "authorized_credential_expires_at":"None",
+                "application_name":"None",
+                "application_client_id":"None"
             },
             {
-                "login": "hubot",
-                "credential_id": 161196,
-                "credential_type": "personal access token",
-                "token_last_eight": "Ae178B4a",
-                "credential_authorized_at": "2019-03-29T19:06:43Z",
-                "credential_accessed_at": "2011-01-26T19:06:43Z",
-                "authorized_credential_expires_at": "2019-04-28T19:06:43Z",
-                "scopes": [
-                "repo"
-                ]
+                "login":"user12",
+                "credential_id":32202196,
+                "credential_type":"SSH key",
+                "credential_authorized_at":"2022-04-21T10:56:33Z",
+                "credential_accessed_at":"2024-10-17T17:12:53Z",
+                "authorized_credential_id":65568893,
+                "fingerprint":"SHA256:o5eXXXXFigXyCIYAXXXAYA1f123455XXXWXXXwqs",
+                "authorized_credential_title":"work ssh  key"
+            },
+            {
+                'login': 'someuser',
+                'credential_id': 358124641,
+                'credential_type': 'OAuth app token',
+                'credential_authorized_at': '2022-06-06T12:48:02Z',
+                'credential_accessed_at': '2024-10-14T07:58:15Z',
+                'authorized_credential_id': 887341235,
+                'token_last_eight': 'BXXXXXa',
+                'scopes': [
+                    'read:user',
+                    'repo',
+                    'user:email',
+                    'workflow'
+                    ],
+                'authorized_credential_note': None,
+                'authorized_credential_expires_at': None,
+                'application_name': 'Visual Studio Code',
+                'application_client_id': '01ab221c9400c4e429b23'
+            },
+            {
+                "login":"anotheruser",
+                "credential_id":39411394,
+                "credential_type":"GitHub app token",
+                "credential_authorized_at":"2022-07-15T14:38:15Z",
+                "credential_accessed_at":"2024-10-22T10:11:10Z",
+                "authorized_credential_id":918339000,
+                "token_last_eight":"uXXXXXX7",
+                "scopes":[],
+                "authorized_credential_note":"None",
+                "authorized_credential_expires_at":"None",
+                "application_name":"Microsoft Teams for GitHub",
+                "application_client_id":"Iv1.2b3f60f5d77cb30d"
             }
+
         ]
 
         """
@@ -471,7 +509,8 @@ class GHWrapper:
 
         if args.dry_run:
             logging.info(
-                f"[bold orange3]DRY-RUN - Revoking SAML SSO authorization {credential_id}", extra={"markup": True}
+                f"[bold orange3]DRY-RUN - Skip Revocation of SAML SSO authorization {credential_id}",
+                extra={"markup": True},
             )
             return True
 
@@ -501,7 +540,7 @@ class GHWrapper:
             )
             return False
 
-        logging.info(
+        logging.debug(
             f"[bold green]Successfully revoked SAML SSO authorization {credential_id} from GitHub API",
             extra={"markup": True},
         )
@@ -595,12 +634,17 @@ def pretty_print_credentials(credentials):
             table.add_column("Expires At", style="medium_spring_green")
             table.add_column("Expired", style="medium_spring_green")
 
+            name_field_mapping = {
+                "personal access token": "authorized_credential_note",
+                "SSH key": "authorized_credential_title",
+                "OAuth app token": "application_name",
+                "GitHub app token": "application_name",
+            }
+
             for credential in credentials:
                 table.add_row(
                     str(credential["login"]),
-                    str(
-                        credential.get("authorized_credential_note", credential.get("authorized_credential_title", ""))
-                    ),
+                    str(credential.get(name_field_mapping[credential["credential_type"]], "")),
                     str(credential["credential_type"]),
                     str(credential["credential_id"]),
                     str(credential["credential_authorized_at"]),
@@ -696,6 +740,13 @@ if __name__ == "__main__":
 
     logging.debug(f"Arguments: {args}")
     logging.debug(f"Environment variables: GH_WHITELIST: {os.getenv('GH_WHITELIST')}")
+
+    if args.days == 0 and args.dry_run is False:
+        logging.warning(
+            "[bold red]WARNING: You are about to delete all credentials associated with the organization, to prevent this, dry_run will be overridden to True",
+            extra={"markup": True},
+        )
+        args.dry_run = True
 
     gh = GHWrapper(
         app_id=os.getenv("GH_APP_ID"),

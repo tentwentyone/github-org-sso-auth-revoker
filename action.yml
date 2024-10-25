@@ -1,5 +1,8 @@
 name: 'Revoke Unused GitHub Credentials'
-description: 'An action to revoke unused GitHub Personal Access Tokens (PATs) and SAML SSO authorizations for an organization.'
+description: 'An action to revoke unused GitHub credentials linked to a GitHub organization'
+branding:
+  icon: 'shield'
+  color: 'yellow'
 
 inputs:
   dry-run:

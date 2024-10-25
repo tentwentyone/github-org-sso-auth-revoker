@@ -1,6 +1,6 @@
-# Revoke inactive GitHub Organization credentials
+# Revoke unused GitHub Organization credentials
 
-This GitHub Action automates the revocation of unused Personal Access Tokens and SSH keys (credentials), enhancing organizational security by removing inactive credentials that haven't been accessed within a specified timeframe. Proactively eliminating these credentials reduces the risk of security breaches and ensures compliance with the organization's security policies.
+This GitHub Action automates the revocation of unused Personal Access Tokens and SSH keys (credentials), enhancing organizational security by removing unused credentials that haven't been accessed within a specified timeframe. Proactively eliminating these credentials reduces the risk of security breaches and ensures compliance with the organization's security policies.
 
 ## Where Can I Use This Action?
 
@@ -38,7 +38,7 @@ An increased attack surface results from having unused (but active) credentials 
 You just need to add the action to your workflow file. Here is an example:
 
 ```yaml
-- name: Revoke Inactive Credentials
+- name: Revoke Unused Credentials
         uses: tentwentyone/github-org-sso-auth-revoker@v1
         with:
           days: ${{github.event.inputs.days || 45}}
@@ -60,7 +60,7 @@ You just need to add the action to your workflow file. Here is an example:
 #### Configurable via manual trigger
 
 - `dry-run` (boolean): Indicates whether the action should perform a dry run. Default is `true` when triggered manually and `false` when triggered by a schedule.
-- `days` (number): Number of days to check for inactive credentials. Default is `45`.
+- `days` (number): Number of days to check for unused credentials. Default is `45`.
 - `whitelist` (string): List of credential IDs to ignore (comma separated). If empty, the `GH_WHITELIST` environment variable will be used.
 
 > the default values will be used when the trigger is a shedule
